@@ -6,6 +6,7 @@
 <title>Cadastros — Belém Church</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 :root {
   --bg:        #F4F5F7;
@@ -64,8 +65,40 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .btn-danger:hover{background:#fecaca}
 .btn-sm{padding:5px 10px;font-size:12px}
 .btn-icon{padding:6px 8px}
-.btn-ghost{background:none;border:none;color:var(--text-3);cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;padding:3px 7px;border-radius:var(--r);transition:all .15s;line-height:1}
-.btn-ghost:hover{background:var(--red-bg);color:var(--red)}
+.btn-whatsapp{background:#25D366;color:#fff;border-color:#25D366}
+.btn-whatsapp:hover{background:#128C7E;border-color:#128C7E}
+/* modal preview escala */
+.preview-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:600;align-items:center;justify-content:center;padding:16px}
+.preview-overlay.open{display:flex}
+.preview-modal{background:var(--bg-white);border-radius:var(--rl);width:100%;max-width:540px;max-height:94vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.preview-modal-hd{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg-white);z-index:10}
+.preview-modal-hd h3{font-size:15px;font-weight:700}
+.preview-modal-body{padding:20px}
+.preview-modal-ft{padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;position:sticky;bottom:0;background:var(--bg-white)}
+/* card da escala para captura */
+#escala-capture{background:#fff;padding:20px;border-radius:12px;font-family:'Inter',sans-serif}
+.ec-header{background:#1A1F2E;color:#fff;border-radius:10px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.ec-header-left{}
+.ec-church{font-size:11px;font-weight:500;opacity:.6;letter-spacing:.6px;text-transform:uppercase;margin-bottom:2px}
+.ec-tipo{font-size:18px;font-weight:700}
+.ec-data{font-size:13px;opacity:.8;margin-top:2px}
+.ec-total{background:rgba(255,255,255,.15);border-radius:8px;padding:8px 14px;text-align:center}
+.ec-total-val{font-size:22px;font-weight:700}
+.ec-total-lbl{font-size:10px;opacity:.7}
+.ec-posicoes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ec-pos{background:#F8F9FA;border-radius:8px;overflow:hidden}
+.ec-pos-hd{display:flex;align-items:center;gap:6px;padding:8px 10px;border-bottom:1px solid #E2E4E8}
+.ec-pos-icon{font-size:14px}
+.ec-pos-nome{font-size:11px;font-weight:700;color:#111318;flex:1}
+.ec-pos-count{font-size:10px;color:#8A909E;background:#fff;border:1px solid #E2E4E8;border-radius:20px;padding:1px 6px}
+.ec-pos-body{padding:8px 10px}
+.ec-pos-empty{font-size:11px;color:#8A909E;font-style:italic}
+.ec-membro{display:flex;align-items:center;gap:6px;padding:3px 0;border-bottom:1px solid #E2E4E8}
+.ec-membro:last-child{border-bottom:none}
+.ec-membro-av{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;flex-shrink:0}
+.ec-membro-nome{font-size:11px;font-weight:500;color:#111318}
+.ec-footer{margin-top:14px;text-align:center;font-size:10px;color:#8A909E;border-top:1px solid #E2E4E8;padding-top:10px}
+
 .filter-bar{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;align-items:center}
 .search-wrap{position:relative;flex:1;min-width:200px;max-width:320px}
 .search-wrap input{width:100%;padding:8px 10px 8px 32px;background:var(--bg-white);border:1px solid var(--border);border-radius:var(--r);font-family:'Inter',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border .15s}
@@ -807,7 +840,8 @@ function renderEscalaCulto(cid){
     ${eq?`<div class="ei-item"><div class="ei-lbl">Equipe Resp.</div><div class="ei-val" style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:${eq.cor};display:inline-block"></span>${eq.nome}</div></div>`:''}
     <div class="ei-item"><div class="ei-lbl">Total Escalados</div><div class="ei-val" style="color:var(--blue)">${totalEsc}</div></div>
     ${culto.obs?`<div class="ei-item"><div class="ei-lbl">Obs.</div><div class="ei-val" style="font-weight:400;color:var(--text-2)">${culto.obs}</div></div>`:''}
-    <div style="margin-left:auto">
+    <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+      <button class="btn btn-whatsapp btn-sm" onclick="compartilharWhatsApp('${cid}')">📲 Compartilhar no WhatsApp</button>
       <button class="btn btn-danger btn-sm" onclick="deletarCulto('${cid}')">🗑️ Excluir</button>
     </div>
   </div>`;
@@ -1074,11 +1108,143 @@ function deletarEquipe(id){
 }
 
 // ════════════════════════════════════
+// COMPARTILHAR WHATSAPP
+// ════════════════════════════════════
+function compartilharWhatsApp(cid){
+  const culto=CULTOS.find(c=>c.id===cid);
+  if(!culto){toast('Culto não encontrado.');return}
+  const esc=ESCALAS[cid]||{};
+  const eq=getEquipe(culto.equipeResp);
+  const totalEsc=Object.values(esc).flat().length;
+
+  // Monta o card de captura
+  let posHtml='';
+  POSICOES.forEach(pos=>{
+    const ids=esc[pos.id]||[];
+    posHtml+=`<div class="ec-pos">
+      <div class="ec-pos-hd">
+        <span class="ec-pos-icon">${pos.icon}</span>
+        <span class="ec-pos-nome">${pos.nome}</span>
+        <span class="ec-pos-count">${ids.length}</span>
+      </div>
+      <div class="ec-pos-body">
+        ${ids.length===0
+          ?`<div class="ec-pos-empty">Ninguém escalado</div>`
+          :ids.map(pid=>{
+              const p=getPessoa(pid);if(!p)return'';
+              const cor=avColor(p.funcao,p.equipe);
+              return `<div class="ec-membro">
+                <div class="ec-membro-av" style="background:${cor}">${initials(p.nome)}</div>
+                <span class="ec-membro-nome">${p.nome}</span>
+              </div>`;
+            }).join('')
+        }
+      </div>
+    </div>`;
+  });
+
+  const captureHTML=`
+    <div class="ec-header">
+      <div class="ec-header-left">
+        <div class="ec-church">✝ Belém Church</div>
+        <div class="ec-tipo">${culto.tipo}</div>
+        <div class="ec-data">${formatDataCurta(culto.data)} · ${culto.hora}${eq?' · '+eq.nome:''}</div>
+      </div>
+      <div class="ec-total">
+        <div class="ec-total-val">${totalEsc}</div>
+        <div class="ec-total-lbl">escalados</div>
+      </div>
+    </div>
+    <div class="ec-posicoes">${posHtml}</div>
+    <div class="ec-footer">Gerado por Belém Church · Sistema de Escalas</div>`;
+
+  document.getElementById('escala-capture').innerHTML=captureHTML;
+  document.getElementById('preview-culto-nome').textContent=`${culto.tipo} · ${formatDataCurta(culto.data)}`;
+  document.getElementById('preview-overlay').classList.add('open');
+  document.getElementById('btn-gerar-img').onclick=()=>gerarECompartilhar(cid);
+}
+
+function gerarECompartilhar(cid){
+  const btn=document.getElementById('btn-gerar-img');
+  btn.textContent='⏳ Gerando imagem...';
+  btn.disabled=true;
+
+  const el=document.getElementById('escala-capture');
+  html2canvas(el,{
+    scale:2,
+    backgroundColor:'#ffffff',
+    useCORS:true,
+    logging:false,
+  }).then(canvas=>{
+    btn.textContent='📲 Compartilhar no WhatsApp';
+    btn.disabled=false;
+
+    // tenta Web Share API (celular)
+    canvas.toBlob(blob=>{
+      if(navigator.share && navigator.canShare && navigator.canShare({files:[new File([blob],'escala.png',{type:'image/png'})]})){
+        const file=new File([blob],'escala-belem.png',{type:'image/png'});
+        navigator.share({
+          title:'Escala do Culto — Belém Church',
+          files:[file]
+        }).catch(()=>fallbackDownload(canvas));
+      } else {
+        fallbackDownload(canvas);
+      }
+    },'image/png');
+  }).catch(()=>{
+    btn.textContent='📲 Compartilhar no WhatsApp';
+    btn.disabled=false;
+    toast('Erro ao gerar imagem. Tente novamente.');
+  });
+}
+
+function fallbackDownload(canvas){
+  // Salva a imagem e abre o WhatsApp
+  const link=document.createElement('a');
+  link.download='escala-belem-church.png';
+  link.href=canvas.toDataURL('image/png');
+  link.click();
+  // Após 1s abre o WhatsApp para o usuário enviar
+  setTimeout(()=>{
+    const msg=encodeURIComponent('📋 Segue a escala do culto — Belém Church! (veja a imagem acima)');
+    window.open(`https://wa.me/?text=${msg}`,'_blank');
+  },1000);
+  toast('✅ Imagem salva! Abrindo WhatsApp...');
+}
+
+// ════════════════════════════════════
 // INIT
 // ════════════════════════════════════
 populateEquipeSelects();
 updateCounts();
 renderPessoasTable();
+</script>
+<!-- MODAL PREVIEW ESCALA -->
+<div class="preview-overlay" id="preview-overlay">
+  <div class="preview-modal">
+    <div class="preview-modal-hd">
+      <div>
+        <h3>📲 Compartilhar Escala</h3>
+        <div style="font-size:12px;color:var(--text-3);margin-top:2px" id="preview-culto-nome"></div>
+      </div>
+      <button class="modal-close" onclick="document.getElementById('preview-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="preview-modal-body">
+      <div style="font-size:12px;color:var(--text-3);margin-bottom:12px;">Prévia da imagem que será compartilhada:</div>
+      <!-- área de captura -->
+      <div id="escala-capture" style="background:#fff;padding:20px;border-radius:12px;border:1px solid var(--border);font-family:'Inter',sans-serif;"></div>
+    </div>
+    <div class="preview-modal-ft">
+      <button class="btn btn-secondary" onclick="document.getElementById('preview-overlay').classList.remove('open')">Cancelar</button>
+      <button class="btn btn-whatsapp" id="btn-gerar-img">📲 Compartilhar no WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('preview-overlay').addEventListener('click',function(e){
+  if(e.target===this)this.classList.remove('open');
+});
 </script>
 </body>
 </html>
