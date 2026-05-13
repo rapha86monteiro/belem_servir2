@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadastros — Belém Church</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root {
+  --bg:        #F4F5F7;
+  --bg-white:  #FFFFFF;
+  --border:    #E2E4E8;
+  --border-2:  #CDD0D8;
+  --text:      #111318;
+  --text-2:    #4A5060;
+  --text-3:    #8A909E;
+  --accent:    #1A1F2E;
+  --accent-2:  #2C3347;
+  --blue:      #2563EB;
+  --blue-bg:   #EFF4FF;
+  --green:     #16A34A;
+  --green-bg:  #F0FDF4;
+  --amber:     #D97706;
+  --amber-bg:  #FFFBEB;
+  --red:       #DC2626;
+  --red-bg:    #FEF2F2;
+  --purple:    #7C3AED;
+  --purple-bg: #F5F3FF;
+  --gray-bg:   #F8F9FA;
+  --r:  6px;
+  --rl: 12px;
+  --shadow:    0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:3px}
+.topbar{background:var(--accent);height:56px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.tb-left{display:flex;align-items:center;gap:12px}
+.cross-icon{width:26px;height:26px;position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cross-icon::before{content:'';position:absolute;width:5px;height:22px;background:#fff;border-radius:3px;opacity:.9}
+.cross-icon::after{content:'';position:absolute;width:22px;height:5px;background:#fff;border-radius:3px;opacity:.9}
+.tb-brand{font-size:15px;font-weight:700;color:#fff;letter-spacing:.3px}
+.tb-brand span{font-weight:400;opacity:.6}
+.nav-wrap{background:var(--bg-white);border-bottom:1px solid var(--border);padding:0 24px;display:flex;gap:2px;overflow-x:auto}
+.nav-btn{background:none;border:none;padding:13px 16px;font-size:13px;font-weight:500;color:var(--text-3);cursor:pointer;font-family:'Inter',sans-serif;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s;display:flex;align-items:center;gap:6px}
+.nav-btn:hover{color:var(--text-2)}
+.nav-btn.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+.nb-count{font-size:11px;background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:1px 7px;color:var(--text-3)}
+.nav-btn.active .nb-count{background:var(--accent);color:#fff;border-color:var(--accent)}
+.main{padding:24px;max-width:1280px;margin:0 auto}
+.page-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px;gap:14px;flex-wrap:wrap}
+.page-hd-left h2{font-size:20px;font-weight:700}
+.page-hd-left p{font-size:13px;color:var(--text-3);margin-top:3px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;border:1px solid transparent;transition:all .15s;white-space:nowrap}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent-2)}
+.btn-secondary{background:var(--bg-white);color:var(--text);border-color:var(--border)}
+.btn-secondary:hover{border-color:var(--border-2);background:var(--bg)}
+.btn-danger{background:var(--red-bg);color:var(--red);border-color:rgba(220,38,38,.2)}
+.btn-danger:hover{background:#fecaca}
+.btn-sm{padding:5px 10px;font-size:12px}
+.btn-icon{padding:6px 8px}
+.btn-whatsapp{background:#25D366;color:#fff;border-color:#25D366}
+.btn-whatsapp:hover{background:#128C7E;border-color:#128C7E}
+/* modal preview escala */
+.preview-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:600;align-items:center;justify-content:center;padding:16px}
+.preview-overlay.open{display:flex}
+.preview-modal{background:var(--bg-white);border-radius:var(--rl);width:100%;max-width:540px;max-height:94vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.preview-modal-hd{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg-white);z-index:10}
+.preview-modal-hd h3{font-size:15px;font-weight:700}
+.preview-modal-body{padding:20px}
+.preview-modal-ft{padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;position:sticky;bottom:0;background:var(--bg-white)}
+/* card da escala para captura */
+#escala-capture{background:#fff;padding:20px;border-radius:12px;font-family:'Inter',sans-serif}
+.ec-header{background:#1A1F2E;color:#fff;border-radius:10px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.ec-header-left{}
+.ec-church{font-size:11px;font-weight:500;opacity:.6;letter-spacing:.6px;text-transform:uppercase;margin-bottom:2px}
+.ec-tipo{font-size:18px;font-weight:700}
+.ec-data{font-size:13px;opacity:.8;margin-top:2px}
+.ec-total{background:rgba(255,255,255,.15);border-radius:8px;padding:8px 14px;text-align:center}
+.ec-total-val{font-size:22px;font-weight:700}
+.ec-total-lbl{font-size:10px;opacity:.7}
+.ec-posicoes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ec-pos{background:#F8F9FA;border-radius:8px;overflow:hidden}
+.ec-pos-hd{display:flex;align-items:center;gap:6px;padding:8px 10px;border-bottom:1px solid #E2E4E8}
+.ec-pos-icon{font-size:14px}
+.ec-pos-nome{font-size:11px;font-weight:700;color:#111318;flex:1}
+.ec-pos-count{font-size:10px;color:#8A909E;background:#fff;border:1px solid #E2E4E8;border-radius:20px;padding:1px 6px}
+.ec-pos-body{padding:8px 10px}
+.ec-pos-empty{font-size:11px;color:#8A909E;font-style:italic}
+.ec-membro{display:flex;align-items:center;gap:6px;padding:3px 0;border-bottom:1px solid #E2E4E8}
+.ec-membro:last-child{border-bottom:none}
+.ec-membro-av{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;flex-shrink:0}
+.ec-membro-nome{font-size:11px;font-weight:500;color:#111318}
+.ec-footer{margin-top:14px;text-align:center;font-size:10px;color:#8A909E;border-top:1px solid #E2E4E8;padding-top:10px}
+
+.filter-bar{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;align-items:center}
+.search-wrap{position:relative;flex:1;min-width:200px;max-width:320px}
+.search-wrap input{width:100%;padding:8px 10px 8px 32px;background:var(--bg-white);border:1px solid var(--border);border-radius:var(--r);font-family:'Inter',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border .15s}
+.search-wrap input:focus{border-color:var(--accent)}
+.search-wrap .s-ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--text-3);pointer-events:none}
+.filter-sel{padding:8px 10px;background:var(--bg-white);border:1px solid var(--border);border-radius:var(--r);font-family:'Inter',sans-serif;font-size:13px;color:var(--text);outline:none;cursor:pointer}
+.filter-sel:focus{border-color:var(--accent)}
+.table-wrap{background:var(--bg-white);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;box-shadow:var(--shadow)}
+.table-hd{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.table-hd h3{font-size:14px;font-weight:600}
+.table-hd .th-meta{font-size:12px;color:var(--text-3)}
+table{width:100%;border-collapse:collapse}
+th{background:var(--gray-bg);padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--text-2);border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+td{padding:12px 16px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--gray-bg)}
+.td-actions{display:flex;gap:6px;opacity:0;transition:opacity .15s}
+tr:hover .td-actions{opacity:1}
+.avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.av-cell{display:flex;align-items:center;gap:10px}
+.av-name{font-weight:500}
+.av-sub{font-size:11px;color:var(--text-3)}
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.2px;white-space:nowrap}
+.badge-coord{background:#fef3c7;color:#92400e}
+.badge-lider{background:var(--blue-bg);color:var(--blue)}
+.badge-colider{background:var(--purple-bg);color:var(--purple)}
+.badge-voluntario{background:var(--green-bg);color:var(--green)}
+.badge-gray{background:var(--bg);color:var(--text-3);border:1px solid var(--border)}
+.equipe-section{margin-bottom:32px}
+.eq-section-hd{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--border)}
+.eq-section-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.eq-section-name{font-size:16px;font-weight:700}
+.eq-section-count{font-size:12px;color:var(--text-3);margin-left:auto}
+.person-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.person-card{background:var(--bg-white);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;box-shadow:var(--shadow);transition:box-shadow .2s,transform .2s;cursor:pointer}
+.person-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.pc-stripe{height:4px}
+.pc-body{padding:16px 14px 14px}
+.pc-av-wrap{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
+.pc-av{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;flex-shrink:0}
+.pc-info{flex:1;min-width:0}
+.pc-name{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pc-role{margin-top:4px}
+.pc-footer{display:flex;flex-direction:column;gap:5px;padding-top:10px;border-top:1px solid var(--border)}
+.pc-detail{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-2)}
+.pd-icon{font-size:11px;color:var(--text-3);flex-shrink:0;width:14px;text-align:center}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;padding:16px}
+.overlay.open{display:flex}
+.modal{background:var(--bg-white);border-radius:var(--rl);width:100%;max-width:560px;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.18);animation:modalIn .2s ease}
+.modal-wide{max-width:680px}
+@keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(10px)}to{opacity:1;transform:none}}
+.modal-hd{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg-white);z-index:10}
+.modal-hd h3{font-size:15px;font-weight:700}
+.modal-hd-sub{font-size:12px;color:var(--text-3);margin-top:2px}
+.modal-close{background:none;border:none;font-size:16px;cursor:pointer;color:var(--text-3);line-height:1;padding:4px 8px;border-radius:var(--r);transition:all .15s}
+.modal-close:hover{background:var(--bg);color:var(--text)}
+.modal-body{padding:20px}
+.modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;align-items:center;gap:8px;position:sticky;bottom:0;background:var(--bg-white)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:500px){.form-grid{grid-template-columns:1fr}}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:12px;font-weight:600;color:var(--text-2)}
+.fg input,.fg select,.fg textarea{padding:9px 11px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);font-family:'Inter',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border .15s;width:100%}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--accent);background:var(--bg-white)}
+.full{grid-column:1/-1}
+.form-divider{grid-column:1/-1;height:1px;background:var(--border);margin:4px 0}
+.form-section-title{grid-column:1/-1;font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.6px;margin-top:4px}
+.empty{text-align:center;padding:50px 20px;color:var(--text-3)}
+.empty .ei{font-size:36px;margin-bottom:12px}
+.empty p{font-size:13px}
+.aniv-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;background:#fff0f0;color:#e11d48;border-radius:20px;padding:2px 8px;font-weight:600}
+.view-toggle{display:flex;background:var(--bg);border-radius:var(--r);padding:3px;border:1px solid var(--border)}
+.vt-btn{padding:5px 10px;border-radius:4px;border:none;background:none;cursor:pointer;font-size:14px;transition:all .15s;color:var(--text-3)}
+.vt-btn.active{background:var(--bg-white);box-shadow:var(--shadow);color:var(--accent)}
+.stat-row{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.stat-pill{background:var(--bg-white);border:1px solid var(--border);border-radius:var(--r);padding:10px 16px;display:flex;align-items:center;gap:8px;box-shadow:var(--shadow)}
+.sp-val{font-size:20px;font-weight:700}
+.sp-lbl{font-size:12px;color:var(--text-3)}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--accent);color:#fff;padding:12px 18px;border-radius:var(--r);font-size:13px;font-weight:500;box-shadow:var(--shadow-md);z-index:9999;opacity:0;transform:translateY(10px);transition:all .25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+
+/* ── ESCALA ── */
+.escala-layout{display:grid;grid-template-columns:230px 1fr;gap:20px;align-items:start}
+@media(max-width:860px){.escala-layout{grid-template-columns:1fr}}
+.culto-panel{background:var(--bg-white);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;box-shadow:var(--shadow);position:sticky;top:76px}
+.culto-panel-hd{background:var(--accent);color:#fff;padding:11px 14px;font-size:12px;font-weight:700;letter-spacing:.3px;display:flex;align-items:center;justify-content:space-between}
+.culto-panel-hd button{background:rgba(255,255,255,.15);border:none;color:#fff;font-size:11px;font-weight:600;border-radius:4px;padding:3px 9px;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s}
+.culto-panel-hd button:hover{background:rgba(255,255,255,.25)}
+.culto-item{padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s}
+.culto-item:last-child{border-bottom:none}
+.culto-item:hover{background:var(--gray-bg)}
+.culto-item.active{background:var(--blue-bg);border-left:3px solid var(--blue)}
+.ci-tipo{font-size:13px;font-weight:600;color:var(--text)}
+.culto-item.active .ci-tipo{color:var(--blue)}
+.ci-data{font-size:11px;color:var(--text-3);margin-top:1px}
+.ci-extra{font-size:10px;color:var(--text-3);margin-top:3px}
+.escala-info-bar{background:var(--bg-white);border:1px solid var(--border);border-radius:var(--rl);padding:14px 18px;margin-bottom:16px;display:flex;gap:20px;flex-wrap:wrap;align-items:center;box-shadow:var(--shadow)}
+.ei-item{display:flex;flex-direction:column;gap:2px}
+.ei-lbl{font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.4px}
+.ei-val{font-size:13px;font-weight:600}
+.posicoes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+.posicao-card{background:var(--bg-white);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;box-shadow:var(--shadow)}
+.pos-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--gray-bg);border-bottom:1px solid var(--border)}
+.pos-hd-left{display:flex;align-items:center;gap:8px}
+.pos-icon{font-size:16px;line-height:1}
+.pos-nome{font-size:13px;font-weight:700}
+.pos-count{font-size:11px;color:var(--text-3);background:var(--bg-white);border:1px solid var(--border);border-radius:20px;padding:1px 8px;min-width:24px;text-align:center}
+.pos-body{padding:10px 12px;min-height:56px}
+.pos-membro-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border)}
+.pos-membro-row:last-child{border-bottom:none}
+.pos-membro-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0}
+.pos-membro-info{flex:1;min-width:0}
+.pos-membro-nome{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pos-membro-eq{font-size:10px;color:var(--text-3)}
+.pos-empty{font-size:12px;color:var(--text-3);font-style:italic;padding:4px 0}
+.pos-footer{padding:8px 12px;border-top:1px solid var(--border)}
+.btn-add-pos{width:100%;padding:6px;background:var(--bg);border:1px dashed var(--border-2);border-radius:var(--r);font-family:'Inter',sans-serif;font-size:12px;color:var(--text-3);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px}
+.btn-add-pos:hover{border-color:var(--accent);color:var(--accent);background:var(--bg-white)}
+.escala-summary{margin-top:16px;background:var(--bg-white);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;box-shadow:var(--shadow)}
+.es-hd{padding:11px 16px;border-bottom:1px solid var(--border);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:space-between}
+.es-row{padding:9px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.es-row:last-child{border-bottom:none}
+.es-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.es-nome{font-size:13px;font-weight:600;min-width:150px}
+.es-tags{display:flex;flex-wrap:wrap;gap:5px}
+.es-tag{font-size:11px;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:2px 7px;color:var(--text-2)}
+/* modal add membro */
+.msl{max-height:320px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--r);margin-top:10px}
+.msl-item{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .1s;user-select:none}
+.msl-item:last-child{border-bottom:none}
+.msl-item:hover{background:var(--gray-bg)}
+.msl-item.sel{background:var(--blue-bg)}
+.msl-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+.msl-info{flex:1;min-width:0}
+.msl-nome{font-size:13px;font-weight:500}
+.msl-sub{font-size:11px;color:var(--text-3);margin-top:1px}
+.msl-ck{font-size:15px;color:var(--blue);visibility:hidden}
+.msl-item.sel .msl-ck{visibility:visible}
+@media(max-width:680px){
+  .main{padding:16px 12px}
+  .person-cards{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  .posicoes-grid{grid-template-columns:1fr}
+  th,td{padding:9px 10px}
+  .td-actions{opacity:1}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-left">
+    <div class="cross-icon"></div>
+    <div class="tb-brand">Belém Church <span>· Cadastros</span></div>
+  </div>
+</div>
+
+<div class="nav-wrap">
+  <button class="nav-btn active" onclick="navTo('pessoas')" id="nav-pessoas">👤 Pessoas <span class="nb-count" id="cnt-pessoas">0</span></button>
+  <button class="nav-btn" onclick="navTo('equipes')" id="nav-equipes">🏷️ Equipes <span class="nb-count" id="cnt-equipes">0</span></button>
+  <button class="nav-btn" onclick="navTo('cards')" id="nav-cards">🃏 Cards de Equipes</button>
+  <button class="nav-btn" onclick="navTo('escala')" id="nav-escala">📋 Escalas</button>
+</div>
+
+<div class="main">
+
+  <!-- PESSOAS -->
+  <div id="page-pessoas">
+    <div class="page-hd">
+      <div class="page-hd-left"><h2>Pessoas</h2><p>Coordenadores, líderes, có-líderes e voluntários</p></div>
+      <button class="btn btn-primary" onclick="openPessoaModal()">+ Nova Pessoa</button>
+    </div>
+    <div class="stat-row" id="pessoas-stats"></div>
+    <div class="filter-bar">
+      <div class="search-wrap"><span class="s-ico">🔍</span><input type="text" id="search-pessoas" placeholder="Buscar por nome..." oninput="renderPessoasTable()"></div>
+      <select class="filter-sel" id="fil-funcao" onchange="renderPessoasTable()">
+        <option value="">Todas as funções</option>
+        <option value="Coordenador">Coordenador</option>
+        <option value="Líder">Líder</option>
+        <option value="Có-líder">Có-líder</option>
+        <option value="Voluntário">Voluntário</option>
+      </select>
+      <select class="filter-sel" id="fil-equipe-p" onchange="renderPessoasTable()"><option value="">Todas as equipes</option></select>
+    </div>
+    <div class="table-wrap">
+      <div class="table-hd"><h3>Lista de Pessoas</h3><span class="th-meta" id="pessoas-count-label"></span></div>
+      <div style="overflow-x:auto">
+        <table><thead><tr><th>Nome</th><th>Função</th><th>Equipe</th><th>Telefone</th><th>Aniversário</th><th style="width:100px"></th></tr></thead>
+        <tbody id="pessoas-tbody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- EQUIPES -->
+  <div id="page-equipes" style="display:none">
+    <div class="page-hd">
+      <div class="page-hd-left"><h2>Equipes</h2><p>Banco de dados das equipes do ministério</p></div>
+      <button class="btn btn-primary" onclick="openEquipeModal()">+ Nova Equipe</button>
+    </div>
+    <div class="table-wrap">
+      <div class="table-hd"><h3>Equipes Cadastradas</h3><span class="th-meta" id="equipes-count-label"></span></div>
+      <div style="overflow-x:auto">
+        <table><thead><tr><th>Equipe</th><th>Líderes</th><th>Membros</th><th style="width:130px"></th></tr></thead>
+        <tbody id="equipes-tbody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARDS -->
+  <div id="page-cards" style="display:none">
+    <div class="page-hd">
+      <div class="page-hd-left"><h2>Cards de Equipes</h2><p>Visualização de líderes, có-líderes e voluntários por equipe</p></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <select class="filter-sel" id="fil-equipe-cards" onchange="renderCards()"><option value="">Todas as equipes</option></select>
+        <select class="filter-sel" id="fil-funcao-cards" onchange="renderCards()">
+          <option value="">Todas as funções</option>
+          <option value="Coordenador">Coordenadores</option>
+          <option value="Líder">Líderes</option>
+          <option value="Có-líder">Có-líderes</option>
+          <option value="Voluntário">Voluntários</option>
+        </select>
+        <div class="view-toggle">
+          <button class="vt-btn active" id="vt-eq" onclick="setCardsView('equipe')" title="Por equipe">🏷️</button>
+          <button class="vt-btn" id="vt-fn" onclick="setCardsView('funcao')" title="Por função">👥</button>
+        </div>
+      </div>
+    </div>
+    <div id="cards-content"></div>
+  </div>
+
+  <!-- ESCALA -->
+  <div id="page-escala" style="display:none">
+    <div class="page-hd">
+      <div class="page-hd-left"><h2>Escalas por Culto</h2><p>Monte a escala de posições para cada culto</p></div>
+      <button class="btn btn-primary" onclick="openNovoCultoModal()">+ Novo Culto</button>
+    </div>
+    <div id="escala-vazia" class="empty" style="display:none">
+      <div class="ei">📋</div><p>Nenhum culto cadastrado. Clique em <strong>+ Novo Culto</strong> para começar.</p>
+    </div>
+    <div class="escala-layout" id="escala-layout" style="display:none">
+      <div>
+        <div class="culto-panel">
+          <div class="culto-panel-hd">
+            <span>📅 Cultos</span>
+            <button onclick="openNovoCultoModal()">+ Novo</button>
+          </div>
+          <div id="culto-list"></div>
+        </div>
+      </div>
+      <div id="escala-main"><div class="empty"><div class="ei">👆</div><p>Selecione um culto para ver ou montar a escala.</p></div></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- MODAL PESSOA -->
+<div class="overlay" id="modal-pessoa">
+  <div class="modal">
+    <div class="modal-hd"><h3 id="mp-title">Nova Pessoa</h3><button class="modal-close" onclick="closeModal('modal-pessoa')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-section-title">📋 Dados Pessoais</div>
+        <div class="fg full"><label>Nome Completo *</label><input type="text" id="mp-nome" placeholder="Nome completo"></div>
+        <div class="fg"><label>Telefone / WhatsApp</label><input type="tel" id="mp-tel" placeholder="(00) 00000-0000" oninput="maskTel(this)"></div>
+        <div class="fg"><label>Data de Aniversário</label><input type="date" id="mp-aniv"></div>
+        <div class="form-divider"></div>
+        <div class="form-section-title">🏷️ Função e Equipe</div>
+        <div class="fg"><label>Função *</label>
+          <select id="mp-funcao">
+            <option value="">— Selecione —</option>
+            <option value="Coordenador">Coordenador</option>
+            <option value="Líder">Líder</option>
+            <option value="Có-líder">Có-líder</option>
+            <option value="Voluntário">Voluntário</option>
+          </select>
+        </div>
+        <div class="fg"><label>Equipe</label><select id="mp-equipe"><option value="">— Nenhuma —</option></select></div>
+        <div class="form-divider"></div>
+        <div class="form-section-title">📝 Observações</div>
+        <div class="fg full"><label>Observações</label><textarea id="mp-obs" rows="2" placeholder="Informações adicionais..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-pessoa')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarPessoa()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EQUIPE -->
+<div class="overlay" id="modal-equipe">
+  <div class="modal">
+    <div class="modal-hd"><h3 id="me-title">Nova Equipe</h3><button class="modal-close" onclick="closeModal('modal-equipe')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="fg full"><label>Nome da Equipe *</label><input type="text" id="me-nome" placeholder="Ex: Equipe de Louvor"></div>
+        <div class="fg"><label>Cor</label><input type="color" id="me-cor" value="#2563EB" style="height:40px;cursor:pointer"></div>
+        <div class="fg"><label>Ícone / Emoji</label><input type="text" id="me-emoji" placeholder="🎵" maxlength="4" style="font-size:20px;text-align:center"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-equipe')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarEquipe()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL VER PESSOA -->
+<div class="overlay" id="modal-ver">
+  <div class="modal">
+    <div class="modal-hd"><h3>Detalhes</h3><button class="modal-close" onclick="closeModal('modal-ver')">✕</button></div>
+    <div class="modal-body" id="modal-ver-body"></div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('modal-ver')">Fechar</button></div>
+  </div>
+</div>
+
+<!-- MODAL NOVO CULTO -->
+<div class="overlay" id="modal-novo-culto">
+  <div class="modal">
+    <div class="modal-hd"><h3>Novo Culto</h3><button class="modal-close" onclick="closeModal('modal-novo-culto')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="fg full"><label>Tipo de Culto *</label>
+          <select id="nc-tipo">
+            <option>Culto Dominical</option>
+            <option>Culto de Quarta</option>
+            <option>Culto de Jovens</option>
+            <option>Culto Especial</option>
+            <option>Conferência</option>
+          </select>
+        </div>
+        <div class="fg"><label>Data *</label><input type="date" id="nc-data"></div>
+        <div class="fg"><label>Horário</label><input type="time" id="nc-hora" value="19:00"></div>
+        <div class="fg full"><label>Equipe Responsável</label>
+          <select id="nc-equipe-resp"><option value="">— Selecione —</option></select>
+        </div>
+        <div class="fg full"><label>Observações</label><input type="text" id="nc-obs" placeholder="Alguma observação especial sobre este culto..."></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-novo-culto')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarCulto()">Criar Culto</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ADICIONAR MEMBRO À POSIÇÃO -->
+<div class="overlay" id="modal-add-membro">
+  <div class="modal modal-wide">
+    <div class="modal-hd">
+      <div><h3 id="mam-title">Escalar Pessoas</h3><div class="modal-hd-sub" id="mam-sub"></div></div>
+      <button class="modal-close" onclick="closeModal('modal-add-membro')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+        <div class="search-wrap" style="flex:1;max-width:none">
+          <span class="s-ico">🔍</span>
+          <input type="text" id="mam-search" placeholder="Buscar por nome..." oninput="renderMSL()" style="width:100%">
+        </div>
+        <select class="filter-sel" id="mam-fil-eq" onchange="renderMSL()"><option value="">Todas as equipes</option></select>
+        <select class="filter-sel" id="mam-fil-fn" onchange="renderMSL()">
+          <option value="">Todas as funções</option>
+          <option value="Líder">Líderes</option>
+          <option value="Có-líder">Có-líderes</option>
+          <option value="Voluntário">Voluntários</option>
+          <option value="Coordenador">Coordenadores</option>
+        </select>
+      </div>
+      <div style="font-size:11px;color:var(--text-3);margin-bottom:4px">Clique para selecionar · Clique novamente para remover</div>
+      <div class="msl" id="mam-lista"></div>
+    </div>
+    <div class="modal-footer">
+      <div style="flex:1;font-size:12px;color:var(--text-3)" id="mam-sel-count"></div>
+      <button class="btn btn-secondary" onclick="closeModal('modal-add-membro')">Cancelar</button>
+      <button class="btn btn-primary" onclick="confirmarEscala()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════
+// DADOS
+// ════════════════════════════════════
+let EQUIPES = [
+  {id:'eq1', nome:'Equipe 1 · Recepção',       cor:'#2563EB', emoji:'🤝'},
+  {id:'eq2', nome:'Equipe 2 · Louvor',          cor:'#7C3AED', emoji:'🎵'},
+  {id:'eq3', nome:'Equipe 3 · Intercessão',     cor:'#DB2777', emoji:'🙏'},
+  {id:'eq4', nome:'Equipe 4 · Mídias',          cor:'#0891B2', emoji:'📸'},
+  {id:'eq5', nome:'Equipe 5 · Crianças',        cor:'#16A34A', emoji:'🧒'},
+  {id:'eq6', nome:'Equipe 6 · Teens',           cor:'#D97706', emoji:'🔥'},
+  {id:'eq7', nome:'Equipe 7 · Segurança',       cor:'#DC2626', emoji:'🛡️'},
+  {id:'eq8', nome:'Equipe 8 · Estacionamento',  cor:'#64748B', emoji:'🚗'},
+  {id:'eq9', nome:'Equipe 9 · Limpeza',         cor:'#854D0E', emoji:'✨'},
+];
+
+let PESSOAS = [
+  {id:'p1',  nome:'Carlos Mendes',  tel:'(21) 99999-0001', aniv:'1985-03-15', funcao:'Coordenador', equipe:'eq1', obs:'Coordenador Geral'},
+  {id:'p2',  nome:'Ana Paula Lima', tel:'(21) 99999-0002', aniv:'1990-07-22', funcao:'Coordenador', equipe:'eq2', obs:'Coord. de Equipes'},
+  {id:'p3',  nome:'João Silva',     tel:'(21) 99999-0003', aniv:'1992-11-05', funcao:'Líder',       equipe:'eq1', obs:''},
+  {id:'p4',  nome:'Maria Santos',   tel:'(21) 99999-0004', aniv:'1995-01-30', funcao:'Líder',       equipe:'eq2', obs:''},
+  {id:'p5',  nome:'Pedro Alves',    tel:'(21) 99999-0005', aniv:'1988-06-18', funcao:'Líder',       equipe:'eq3', obs:''},
+  {id:'p6',  nome:'Lúcia Ferreira', tel:'(21) 99999-0006', aniv:'1993-09-12', funcao:'Líder',       equipe:'eq4', obs:''},
+  {id:'p7',  nome:'Roberto Costa',  tel:'(21) 99999-0007', aniv:'1987-04-25', funcao:'Líder',       equipe:'eq5', obs:''},
+  {id:'p8',  nome:'Fernanda Lima',  tel:'(21) 99999-0008', aniv:'1996-12-08', funcao:'Líder',       equipe:'eq6', obs:''},
+  {id:'p9',  nome:'Marcos Souza',   tel:'(21) 99999-0009', aniv:'1984-08-14', funcao:'Líder',       equipe:'eq7', obs:''},
+  {id:'p10', nome:'Patrícia Nunes', tel:'(21) 99999-0010', aniv:'1991-02-28', funcao:'Líder',       equipe:'eq8', obs:''},
+  {id:'p11', nome:'Ricardo Barros', tel:'(21) 99999-0011', aniv:'1989-10-03', funcao:'Líder',       equipe:'eq9', obs:''},
+  {id:'p12', nome:'Ana Clara',      tel:'(21) 99999-0012', aniv:'1998-05-20', funcao:'Có-líder',    equipe:'eq1', obs:''},
+  {id:'p13', nome:'Bruno Lima',     tel:'(21) 99999-0013', aniv:'1994-07-11', funcao:'Voluntário',  equipe:'eq1', obs:''},
+  {id:'p14', nome:'Carla Ramos',    tel:'(21) 99999-0014', aniv:'2000-03-02', funcao:'Voluntário',  equipe:'eq1', obs:''},
+  {id:'p15', nome:'Diego Faria',    tel:'(21) 99999-0015', aniv:'1993-11-17', funcao:'Có-líder',    equipe:'eq2', obs:'Instrumentista'},
+  {id:'p16', nome:'Elaine Costa',   tel:'(21) 99999-0016', aniv:'1997-06-29', funcao:'Voluntário',  equipe:'eq2', obs:'Vocal'},
+  {id:'p17', nome:'Fábio Melo',     tel:'(21) 99999-0017', aniv:'1990-04-06', funcao:'Voluntário',  equipe:'eq2', obs:'Vocal'},
+  {id:'p18', nome:'Gabi Torres',    tel:'(21) 99999-0018', aniv:'1999-01-14', funcao:'Có-líder',    equipe:'eq3', obs:''},
+  {id:'p19', nome:'Hugo Silva',     tel:'(21) 99999-0019', aniv:'1986-08-21', funcao:'Voluntário',  equipe:'eq3', obs:''},
+  {id:'p20', nome:'Iris Nunes',     tel:'(21) 99999-0020', aniv:'1995-10-09', funcao:'Có-líder',    equipe:'eq4', obs:'Operadora'},
+  {id:'p21', nome:'Joel Barros',    tel:'(21) 99999-0021', aniv:'1992-12-31', funcao:'Voluntário',  equipe:'eq4', obs:'Fotógrafo'},
+  {id:'p22', nome:'Karen Lima',     tel:'(21) 99999-0022', aniv:'1998-03-16', funcao:'Có-líder',    equipe:'eq5', obs:''},
+  {id:'p23', nome:'Lucas Pinto',    tel:'(21) 99999-0023', aniv:'2001-09-04', funcao:'Voluntário',  equipe:'eq5', obs:''},
+  {id:'p24', nome:'Marta Dias',     tel:'(21) 99999-0024', aniv:'1997-07-23', funcao:'Có-líder',    equipe:'eq6', obs:''},
+  {id:'p25', nome:'Neto Rocha',     tel:'(21) 99999-0025', aniv:'1988-02-10', funcao:'Voluntário',  equipe:'eq7', obs:''},
+  {id:'p26', nome:'Olga Pereira',   tel:'(21) 99999-0026', aniv:'1993-05-27', funcao:'Voluntário',  equipe:'eq7', obs:''},
+  {id:'p27', nome:'Paulo Andrade',  tel:'(21) 99999-0027', aniv:'1990-11-08', funcao:'Voluntário',  equipe:'eq8', obs:''},
+  {id:'p28', nome:'Quirino Reis',   tel:'(21) 99999-0028', aniv:'1995-04-19', funcao:'Voluntário',  equipe:'eq9', obs:''},
+  {id:'p29', nome:'Rose Machado',   tel:'(21) 99999-0029', aniv:'1999-08-02', funcao:'Voluntário',  equipe:'eq9', obs:''},
+];
+
+const POSICOES = [
+  {id:'pos1', nome:'Recepção',          icon:'🤝'},
+  {id:'pos2', nome:'Hall de Entrada',   icon:'🚪'},
+  {id:'pos3', nome:'Mezanino',          icon:'🏛️'},
+  {id:'pos4', nome:'Templo',            icon:'⛪'},
+  {id:'pos5', nome:'Banheiro',          icon:'🚻'},
+  {id:'pos6', nome:'Estacionamento',    icon:'🚗'},
+  {id:'pos7', nome:'Apoio e Limpeza',   icon:'✨'},
+  {id:'pos8', nome:'Portão de Entrada', icon:'🛡️'},
+  {id:'pos9', nome:'Oferta',            icon:'💛'},
+];
+
+let CULTOS = [
+  {id:'c1', tipo:'Culto Dominical', data:'2025-05-11', hora:'18:00', equipeResp:'eq1', obs:''},
+  {id:'c2', tipo:'Culto de Quarta', data:'2025-05-14', hora:'19:30', equipeResp:'eq2', obs:''},
+  {id:'c3', tipo:'Culto Dominical', data:'2025-05-18', hora:'18:00', equipeResp:'eq3', obs:''},
+];
+
+// ESCALAS[cultoId][posId] = [pessoaId, ...]
+let ESCALAS = {
+  c1: {
+    pos1: ['p3','p12','p13'],
+    pos2: ['p4','p15'],
+    pos4: ['p1','p5','p18'],
+    pos8: ['p9','p25','p26'],
+    pos9: ['p2','p6'],
+  },
+  c2: {
+    pos1: ['p3','p14'],
+    pos4: ['p7','p22'],
+    pos8: ['p9'],
+  }
+};
+
+// ════════════════════════════════════
+// ESTADO
+// ════════════════════════════════════
+let editPessoaId = null;
+let editEquipeId = null;
+let cardsView    = 'equipe';
+let currentPage  = 'pessoas';
+let cultoAtivo   = null;
+let mamCultoId   = null;
+let mamPosId     = null;
+let mamSel       = [];
+
+// ════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════
+const getEquipe  = id => EQUIPES.find(e=>e.id===id);
+const getPessoa  = id => PESSOAS.find(p=>p.id===id);
+const getPosicao = id => POSICOES.find(p=>p.id===id);
+const initials   = nome => nome.split(' ').slice(0,2).map(n=>n[0].toUpperCase()).join('');
+
+function formatAniv(d){
+  if(!d) return '—';
+  const [,m,dd]=d.split('-');
+  return `${dd} ${['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'][+m-1]}`;
+}
+function formatDataCurta(d){
+  if(!d) return '—';
+  const [y,m,dd]=d.split('-');
+  const dow=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'][new Date(d+'T12:00').getDay()];
+  return `${dow} ${dd}/${m}/${y}`;
+}
+function isAnivHoje(d){
+  if(!d) return false;
+  const h=new Date(), [,m,dd]=d.split('-');
+  return +m===h.getMonth()+1 && +dd===h.getDate();
+}
+function isAnivMes(d){
+  if(!d) return false;
+  return +d.split('-')[1]===new Date().getMonth()+1;
+}
+function badgeClass(f){
+  return {Coordenador:'badge-coord',Líder:'badge-lider','Có-líder':'badge-colider',Voluntário:'badge-voluntario'}[f]||'badge-gray';
+}
+function avColor(funcao, equipeId){
+  const eq=getEquipe(equipeId);
+  if(eq) return eq.cor;
+  return {Coordenador:'#92400e',Líder:'#2563EB','Có-líder':'#7C3AED',Voluntário:'#16A34A'}[funcao]||'#1A1F2E';
+}
+function maskTel(input){
+  let v=input.value.replace(/\D/g,'').slice(0,11);
+  if(v.length>6) v=`(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
+  else if(v.length>2) v=`(${v.slice(0,2)}) ${v.slice(2)}`;
+  else if(v.length) v=`(${v}`;
+  input.value=v;
+}
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+function updateCounts(){
+  document.getElementById('cnt-pessoas').textContent=PESSOAS.length;
+  document.getElementById('cnt-equipes').textContent=EQUIPES.length;
+}
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+document.querySelectorAll('.overlay').forEach(el=>{
+  el.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open')});
+});
+
+function populateEquipeSelects(){
+  const opts=EQUIPES.map(e=>`<option value="${e.id}">${e.emoji} ${e.nome}</option>`).join('');
+  document.getElementById('mp-equipe').innerHTML='<option value="">— Nenhuma —</option>'+opts;
+  document.getElementById('fil-equipe-p').innerHTML='<option value="">Todas as equipes</option>'+opts;
+  document.getElementById('fil-equipe-cards').innerHTML='<option value="">Todas as equipes</option>'+opts;
+  document.getElementById('mam-fil-eq').innerHTML='<option value="">Todas as equipes</option>'+opts;
+  document.getElementById('nc-equipe-resp').innerHTML='<option value="">— Selecione —</option>'+opts;
+}
+
+// ════════════════════════════════════
+// NAVEGAÇÃO
+// ════════════════════════════════════
+function navTo(page){
+  currentPage=page;
+  ['pessoas','equipes','cards','escala'].forEach(p=>{
+    document.getElementById('page-'+p).style.display=p===page?'block':'none';
+    document.getElementById('nav-'+p).classList.toggle('active',p===page);
+  });
+  if(page==='pessoas') renderPessoasTable();
+  if(page==='equipes') renderEquipesTable();
+  if(page==='cards')   renderCards();
+  if(page==='escala')  renderEscalaPage();
+}
+
+// ════════════════════════════════════
+// PESSOAS
+// ════════════════════════════════════
+function renderPessoasTable(){
+  const q=(document.getElementById('search-pessoas').value||'').toLowerCase();
+  const fn=document.getElementById('fil-funcao').value;
+  const eq=document.getElementById('fil-equipe-p').value;
+  const list=PESSOAS.filter(p=>
+    (!fn||p.funcao===fn)&&(!eq||p.equipe===eq)&&(!q||p.nome.toLowerCase().includes(q))
+  );
+  document.getElementById('pessoas-count-label').textContent=`${list.length} registro${list.length!==1?'s':''}`;
+  const s={Coordenador:0,Líder:0,'Có-líder':0,Voluntário:0};
+  PESSOAS.forEach(p=>{if(s[p.funcao]!==undefined)s[p.funcao]++});
+  document.getElementById('pessoas-stats').innerHTML=`
+    <div class="stat-pill"><div class="sp-val">${PESSOAS.length}</div><div class="sp-lbl">Total</div></div>
+    <div class="stat-pill"><div class="sp-val" style="color:#92400e">${s.Coordenador}</div><div class="sp-lbl">Coordenadores</div></div>
+    <div class="stat-pill"><div class="sp-val" style="color:var(--blue)">${s['Líder']}</div><div class="sp-lbl">Líderes</div></div>
+    <div class="stat-pill"><div class="sp-val" style="color:var(--purple)">${s['Có-líder']}</div><div class="sp-lbl">Có-líderes</div></div>
+    <div class="stat-pill"><div class="sp-val" style="color:var(--green)">${s.Voluntário}</div><div class="sp-lbl">Voluntários</div></div>`;
+  if(!list.length){
+    document.getElementById('pessoas-tbody').innerHTML=`<tr><td colspan="6"><div class="empty"><div class="ei">👤</div><p>Nenhuma pessoa encontrada.</p></div></td></tr>`;
+    return;
+  }
+  document.getElementById('pessoas-tbody').innerHTML=list.map(p=>{
+    const eq=getEquipe(p.equipe), cor=avColor(p.funcao,p.equipe);
+    const ah=isAnivHoje(p.aniv), am=isAnivMes(p.aniv);
+    return `<tr>
+      <td><div class="av-cell">
+        <div class="avatar" style="background:${cor}">${initials(p.nome)}</div>
+        <div><div class="av-name">${p.nome}${ah?` <span class="aniv-badge">🎂 Hoje!</span>`:''}</div>${p.obs?`<div class="av-sub">${p.obs}</div>`:''}</div>
+      </div></td>
+      <td><span class="badge ${badgeClass(p.funcao)}">${p.funcao}</span></td>
+      <td>${eq?`<span style="display:inline-flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:${eq.cor};display:inline-block"></span>${eq.nome}</span>`:'—'}</td>
+      <td>${p.tel?`<a href="tel:${p.tel}" style="color:var(--text);text-decoration:none">${p.tel}</a>`:'—'}</td>
+      <td>${ah?`<span style="color:var(--red)">🎂 ${formatAniv(p.aniv)}</span>`:am?`<span style="color:var(--amber)">🎈 ${formatAniv(p.aniv)}</span>`:(p.aniv?formatAniv(p.aniv):'—')}</td>
+      <td><div class="td-actions">
+        <button class="btn btn-secondary btn-sm btn-icon" onclick="verPessoa('${p.id}')" title="Ver">👁️</button>
+        <button class="btn btn-secondary btn-sm btn-icon" onclick="editarPessoa('${p.id}')" title="Editar">✏️</button>
+        <button class="btn btn-danger btn-sm btn-icon" onclick="deletarPessoa('${p.id}')" title="Remover">🗑️</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+// ════════════════════════════════════
+// EQUIPES
+// ════════════════════════════════════
+function renderEquipesTable(){
+  document.getElementById('equipes-count-label').textContent=`${EQUIPES.length} equipe${EQUIPES.length!==1?'s':''}`;
+  document.getElementById('equipes-tbody').innerHTML=EQUIPES.map(eq=>{
+    const lids=PESSOAS.filter(p=>p.equipe===eq.id&&p.funcao==='Líder');
+    const total=PESSOAS.filter(p=>p.equipe===eq.id).length;
+    return `<tr>
+      <td><div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:var(--r);background:${eq.cor};display:flex;align-items:center;justify-content:center;font-size:18px">${eq.emoji||'👥'}</div>
+        <span style="font-weight:600">${eq.nome}</span>
+      </div></td>
+      <td>${lids.length?lids.map(l=>`<span class="badge badge-lider" style="margin-right:4px">${l.nome}</span>`).join(''):'<span style="color:var(--text-3)">—</span>'}</td>
+      <td><strong>${total}</strong> pessoa${total!==1?'s':''}</td>
+      <td><div class="td-actions">
+        <button class="btn btn-secondary btn-sm" onclick="editarEquipe('${eq.id}')">✏️ Editar</button>
+        <button class="btn btn-danger btn-sm btn-icon" onclick="deletarEquipe('${eq.id}')">🗑️</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+// ════════════════════════════════════
+// CARDS
+// ════════════════════════════════════
+function setCardsView(v){
+  cardsView=v;
+  document.getElementById('vt-eq').classList.toggle('active',v==='equipe');
+  document.getElementById('vt-fn').classList.toggle('active',v==='funcao');
+  renderCards();
+}
+function renderCards(){
+  const eqF=document.getElementById('fil-equipe-cards').value;
+  const fnF=document.getElementById('fil-funcao-cards').value;
+  const pessoas=PESSOAS.filter(p=>(!eqF||p.equipe===eqF)&&(!fnF||p.funcao===fnF));
+  const el=document.getElementById('cards-content');
+  if(!pessoas.length){el.innerHTML='<div class="empty"><div class="ei">🃏</div><p>Nenhuma pessoa encontrada.</p></div>';return}
+  const order={Coordenador:0,Líder:1,'Có-líder':2,Voluntário:3};
+  if(cardsView==='equipe'){
+    let html='';
+    EQUIPES.filter(e=>eqF?e.id===eqF:true).forEach(eq=>{
+      const membros=pessoas.filter(p=>p.equipe===eq.id).sort((a,b)=>(order[a.funcao]||9)-(order[b.funcao]||9));
+      if(!membros.length) return;
+      html+=`<div class="equipe-section">
+        <div class="eq-section-hd">
+          <div class="eq-section-dot" style="background:${eq.cor}"></div>
+          <span style="font-size:20px">${eq.emoji||'👥'}</span>
+          <span class="eq-section-name">${eq.nome}</span>
+          <span class="eq-section-count">${membros.length} pessoa${membros.length!==1?'s':''}</span>
+        </div>
+        <div class="person-cards">${membros.map(p=>pcHTML(p,eq)).join('')}</div>
+      </div>`;
+    });
+    el.innerHTML=html||'<div class="empty"><div class="ei">🃏</div><p>Nenhum membro encontrado.</p></div>';
+  } else {
+    const fns=fnF?[fnF]:['Coordenador','Líder','Có-líder','Voluntário'];
+    const icons={Coordenador:'👑',Líder:'🔵','Có-líder':'🟣',Voluntário:'🟢'};
+    let html='';
+    fns.forEach(fn=>{
+      const membros=pessoas.filter(p=>p.funcao===fn);
+      if(!membros.length) return;
+      html+=`<div class="equipe-section">
+        <div class="eq-section-hd">
+          <span style="font-size:20px">${icons[fn]}</span>
+          <span class="eq-section-name">${fn}es</span>
+          <span class="eq-section-count">${membros.length}</span>
+        </div>
+        <div class="person-cards">${membros.map(p=>pcHTML(p,getEquipe(p.equipe))).join('')}</div>
+      </div>`;
+    });
+    el.innerHTML=html||'<div class="empty"><div class="ei">🃏</div><p>Nenhum membro encontrado.</p></div>';
+  }
+}
+function pcHTML(p,eq){
+  const cor=eq?eq.cor:avColor(p.funcao,'');
+  const ah=isAnivHoje(p.aniv), am=isAnivMes(p.aniv);
+  return `<div class="person-card" onclick="verPessoa('${p.id}')">
+    <div class="pc-stripe" style="background:${cor}"></div>
+    <div class="pc-body">
+      <div class="pc-av-wrap">
+        <div class="pc-av" style="background:${cor}">${initials(p.nome)}</div>
+        <div class="pc-info"><div class="pc-name">${p.nome}</div><div class="pc-role"><span class="badge ${badgeClass(p.funcao)}">${p.funcao}</span></div></div>
+      </div>
+      <div class="pc-footer">
+        ${eq?`<div class="pc-detail"><span class="pd-icon">🏷️</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${eq.nome}</span></div>`:''}
+        ${p.tel?`<div class="pc-detail"><span class="pd-icon">📱</span><span>${p.tel}</span></div>`:''}
+        ${p.aniv?`<div class="pc-detail"><span class="pd-icon">🎂</span><span ${ah?'style="color:var(--red);font-weight:600"':am?'style="color:var(--amber)"':''}>${formatAniv(p.aniv)}${ah?' · Hoje!':am?' · Este mês':''}</span></div>`:''}
+        ${p.obs?`<div class="pc-detail"><span class="pd-icon">📝</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.obs}</span></div>`:''}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ════════════════════════════════════
+// ESCALA
+// ════════════════════════════════════
+function renderEscalaPage(){
+  const tem=CULTOS.length>0;
+  document.getElementById('escala-vazia').style.display=tem?'none':'block';
+  document.getElementById('escala-layout').style.display=tem?'grid':'none';
+  if(!tem){cultoAtivo=null;return}
+  renderCultoList();
+  if(cultoAtivo&&CULTOS.find(c=>c.id===cultoAtivo)) renderEscalaCulto(cultoAtivo);
+  else if(CULTOS.length) selecionarCulto(CULTOS.sort((a,b)=>b.data.localeCompare(a.data))[0].id);
+}
+
+function renderCultoList(){
+  const sorted=[...CULTOS].sort((a,b)=>b.data.localeCompare(a.data));
+  document.getElementById('culto-list').innerHTML=sorted.map(c=>{
+    const eq=getEquipe(c.equipeResp);
+    const n=Object.values(ESCALAS[c.id]||{}).flat().length;
+    return `<div class="culto-item${cultoAtivo===c.id?' active':''}" onclick="selecionarCulto('${c.id}')">
+      <div class="ci-tipo">${c.tipo}</div>
+      <div class="ci-data">${formatDataCurta(c.data)} · ${c.hora}</div>
+      <div class="ci-extra">${eq?`<span style="display:inline-flex;align-items:center;gap:3px"><span style="width:6px;height:6px;border-radius:50%;background:${eq.cor};display:inline-block"></span>${eq.nome}</span>`:''}${n?` · <strong>${n}</strong> escalados`:' · Sem escala'}</div>
+    </div>`;
+  }).join('');
+}
+
+function selecionarCulto(cid){
+  cultoAtivo=cid;
+  renderCultoList();
+  renderEscalaCulto(cid);
+}
+
+function renderEscalaCulto(cid){
+  const culto=CULTOS.find(c=>c.id===cid);
+  if(!culto) return;
+  const eq=getEquipe(culto.equipeResp);
+  const esc=ESCALAS[cid]||{};
+  const totalEsc=Object.values(esc).flat().length;
+
+  // info bar
+  let html=`<div class="escala-info-bar">
+    <div class="ei-item"><div class="ei-lbl">Culto</div><div class="ei-val">${culto.tipo}</div></div>
+    <div class="ei-item"><div class="ei-lbl">Data</div><div class="ei-val">${formatDataCurta(culto.data)}</div></div>
+    <div class="ei-item"><div class="ei-lbl">Horário</div><div class="ei-val">${culto.hora}</div></div>
+    ${eq?`<div class="ei-item"><div class="ei-lbl">Equipe Resp.</div><div class="ei-val" style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:${eq.cor};display:inline-block"></span>${eq.nome}</div></div>`:''}
+    <div class="ei-item"><div class="ei-lbl">Total Escalados</div><div class="ei-val" style="color:var(--blue)">${totalEsc}</div></div>
+    ${culto.obs?`<div class="ei-item"><div class="ei-lbl">Obs.</div><div class="ei-val" style="font-weight:400;color:var(--text-2)">${culto.obs}</div></div>`:''}
+    <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+      <button class="btn btn-whatsapp btn-sm" onclick="compartilharWhatsApp('${cid}')">📲 Compartilhar no WhatsApp</button>
+      <button class="btn btn-danger btn-sm" onclick="deletarCulto('${cid}')">🗑️ Excluir</button>
+    </div>
+  </div>`;
+
+  // grid de posições
+  html+=`<div class="posicoes-grid">`;
+  POSICOES.forEach(pos=>{
+    const ids=esc[pos.id]||[];
+    html+=`<div class="posicao-card">
+      <div class="pos-hd">
+        <div class="pos-hd-left"><span class="pos-icon">${pos.icon}</span><span class="pos-nome">${pos.nome}</span></div>
+        <span class="pos-count">${ids.length}</span>
+      </div>
+      <div class="pos-body">
+        ${ids.length===0
+          ? `<div class="pos-empty">Ninguém escalado</div>`
+          : ids.map(pid=>{
+              const p=getPessoa(pid); if(!p) return '';
+              const eqP=getEquipe(p.equipe), cor=avColor(p.funcao,p.equipe);
+              return `<div class="pos-membro-row">
+                <div class="pos-membro-av" style="background:${cor}">${initials(p.nome)}</div>
+                <div class="pos-membro-info">
+                  <div class="pos-membro-nome">${p.nome}</div>
+                  <div class="pos-membro-eq">${eqP?eqP.nome:p.funcao}</div>
+                </div>
+                <button class="btn-ghost" onclick="removerPos('${cid}','${pos.id}','${pid}')" title="Remover">✕</button>
+              </div>`;
+            }).join('')
+        }
+      </div>
+      <div class="pos-footer">
+        <button class="btn-add-pos" onclick="openAddMembro('${cid}','${pos.id}')">
+          <span>＋</span> Escalar pessoa
+        </button>
+      </div>
+    </div>`;
+  });
+  html+=`</div>`;
+
+  // resumo por equipe
+  const eqMap={};
+  POSICOES.forEach(pos=>{
+    (esc[pos.id]||[]).forEach(pid=>{
+      const p=getPessoa(pid); if(!p) return;
+      if(!eqMap[p.equipe]) eqMap[p.equipe]={count:0,posicoes:[]};
+      eqMap[p.equipe].count++;
+      if(!eqMap[p.equipe].posicoes.includes(pos.nome)) eqMap[p.equipe].posicoes.push(pos.nome);
+    });
+  });
+  const eqKeys=Object.keys(eqMap);
+  if(eqKeys.length){
+    html+=`<div class="escala-summary">
+      <div class="es-hd"><span>📊 Resumo por Equipe</span><span style="font-size:12px;color:var(--text-3)">${eqKeys.length} equipe${eqKeys.length!==1?'s':''}</span></div>`;
+    eqKeys.forEach(eid=>{
+      const eq=getEquipe(eid);
+      html+=`<div class="es-row">
+        <div class="es-dot" style="background:${eq?eq.cor:'#ccc'}"></div>
+        <div class="es-nome">${eq?eq.nome:'Sem equipe'} <span style="font-weight:400;color:var(--text-3);font-size:11px">(${eqMap[eid].count})</span></div>
+        <div class="es-tags">${eqMap[eid].posicoes.map(p=>`<span class="es-tag">${p}</span>`).join('')}</div>
+      </div>`;
+    });
+    html+=`</div>`;
+  }
+
+  document.getElementById('escala-main').innerHTML=html;
+}
+
+function removerPos(cid,posId,pid){
+  if(!ESCALAS[cid]||!ESCALAS[cid][posId]) return;
+  ESCALAS[cid][posId]=ESCALAS[cid][posId].filter(x=>x!==pid);
+  if(!ESCALAS[cid][posId].length) delete ESCALAS[cid][posId];
+  renderEscalaCulto(cid);
+  renderCultoList();
+  toast('Pessoa removida da posição.');
+}
+
+// ── MODAL ADD MEMBRO ──
+function openAddMembro(cid,posId){
+  mamCultoId=cid; mamPosId=posId;
+  const pos=getPosicao(posId), culto=CULTOS.find(c=>c.id===cid);
+  document.getElementById('mam-title').textContent=`${pos.icon} ${pos.nome}`;
+  document.getElementById('mam-sub').textContent=`${culto.tipo} · ${formatDataCurta(culto.data)} · ${culto.hora}`;
+  mamSel=[...(ESCALAS[cid]?.[posId]||[])];
+  document.getElementById('mam-search').value='';
+  document.getElementById('mam-fil-eq').value='';
+  document.getElementById('mam-fil-fn').value='';
+  renderMSL();
+  openModal('modal-add-membro');
+}
+function renderMSL(){
+  const q=(document.getElementById('mam-search').value||'').toLowerCase();
+  const eqF=document.getElementById('mam-fil-eq').value;
+  const fnF=document.getElementById('mam-fil-fn').value;
+  let lista=PESSOAS.filter(p=>
+    (!eqF||p.equipe===eqF)&&(!fnF||p.funcao===fnF)&&(!q||p.nome.toLowerCase().includes(q))
+  ).sort((a,b)=>(mamSel.includes(b.id)?1:0)-(mamSel.includes(a.id)?1:0)||a.nome.localeCompare(b.nome));
+
+  document.getElementById('mam-lista').innerHTML=lista.map(p=>{
+    const eq=getEquipe(p.equipe), cor=avColor(p.funcao,p.equipe);
+    const sel=mamSel.includes(p.id);
+    return `<div class="msl-item${sel?' sel':''}" onclick="toggleMSL('${p.id}')">
+      <div class="msl-av" style="background:${cor}">${initials(p.nome)}</div>
+      <div class="msl-info">
+        <div class="msl-nome">${p.nome}</div>
+        <div class="msl-sub"><span class="badge ${badgeClass(p.funcao)}" style="font-size:10px;padding:1px 6px">${p.funcao}</span>${eq?` · ${eq.nome}`:''}</div>
+      </div>
+      <span class="msl-ck">✓</span>
+    </div>`;
+  }).join('');
+  const n=mamSel.length;
+  document.getElementById('mam-sel-count').textContent=n?`${n} selecionado${n!==1?'s':''}  ·  clique em Confirmar para salvar`:'';
+}
+function toggleMSL(pid){
+  mamSel=mamSel.includes(pid)?mamSel.filter(x=>x!==pid):[...mamSel,pid];
+  renderMSL();
+}
+function confirmarEscala(){
+  if(!ESCALAS[mamCultoId]) ESCALAS[mamCultoId]={};
+  if(mamSel.length) ESCALAS[mamCultoId][mamPosId]=[...mamSel];
+  else delete ESCALAS[mamCultoId][mamPosId];
+  closeModal('modal-add-membro');
+  renderEscalaCulto(mamCultoId);
+  renderCultoList();
+  toast('✅ Escala atualizada!');
+}
+
+// ── CULTOS ──
+function openNovoCultoModal(){
+  document.getElementById('nc-data').value='';
+  document.getElementById('nc-hora').value='19:00';
+  document.getElementById('nc-tipo').value='Culto Dominical';
+  document.getElementById('nc-equipe-resp').value='';
+  document.getElementById('nc-obs').value='';
+  openModal('modal-novo-culto');
+}
+function salvarCulto(){
+  const data=document.getElementById('nc-data').value;
+  if(!data){alert('Informe a data.');return}
+  const c={id:'c'+Date.now(), tipo:document.getElementById('nc-tipo').value, data, hora:document.getElementById('nc-hora').value||'19:00', equipeResp:document.getElementById('nc-equipe-resp').value, obs:document.getElementById('nc-obs').value};
+  CULTOS.push(c); ESCALAS[c.id]={};
+  closeModal('modal-novo-culto');
+  toast('✅ Culto criado!');
+  renderEscalaPage();
+  selecionarCulto(c.id);
+}
+function deletarCulto(cid){
+  if(!confirm('Excluir este culto e toda a sua escala?')) return;
+  CULTOS=CULTOS.filter(c=>c.id!==cid); delete ESCALAS[cid];
+  if(cultoAtivo===cid) cultoAtivo=null;
+  toast('🗑️ Culto excluído.');
+  renderEscalaPage();
+}
+
+// ════════════════════════════════════
+// CRUD PESSOA
+// ════════════════════════════════════
+function openPessoaModal(id){
+  editPessoaId=id||null;
+  document.getElementById('mp-title').textContent=id?'Editar Pessoa':'Nova Pessoa';
+  const p=id?PESSOAS.find(x=>x.id===id):null;
+  ['mp-nome','mp-tel','mp-aniv','mp-funcao','mp-equipe','mp-obs'].forEach(fid=>{
+    const field=fid.replace('mp-','');
+    document.getElementById(fid).value=p?p[field]||p[{nome:'nome',tel:'tel',aniv:'aniv',funcao:'funcao',equipe:'equipe',obs:'obs'}[field]]||'':'';
+  });
+  // fix
+  if(p){
+    document.getElementById('mp-nome').value=p.nome;
+    document.getElementById('mp-tel').value=p.tel||'';
+    document.getElementById('mp-aniv').value=p.aniv||'';
+    document.getElementById('mp-funcao').value=p.funcao||'';
+    document.getElementById('mp-equipe').value=p.equipe||'';
+    document.getElementById('mp-obs').value=p.obs||'';
+  } else {
+    document.getElementById('mp-nome').value='';
+    document.getElementById('mp-tel').value='';
+    document.getElementById('mp-aniv').value='';
+    document.getElementById('mp-funcao').value='';
+    document.getElementById('mp-equipe').value='';
+    document.getElementById('mp-obs').value='';
+  }
+  openModal('modal-pessoa');
+}
+function editarPessoa(id){openPessoaModal(id)}
+function salvarPessoa(){
+  const nome=document.getElementById('mp-nome').value.trim();
+  const funcao=document.getElementById('mp-funcao').value;
+  if(!nome){alert('Informe o nome.');return}
+  if(!funcao){alert('Selecione a função.');return}
+  const p={id:editPessoaId||'p'+Date.now(),nome,funcao,
+    tel:document.getElementById('mp-tel').value,
+    aniv:document.getElementById('mp-aniv').value,
+    equipe:document.getElementById('mp-equipe').value,
+    obs:document.getElementById('mp-obs').value};
+  if(editPessoaId){PESSOAS[PESSOAS.findIndex(x=>x.id===editPessoaId)]=p;toast('✅ Pessoa atualizada!');}
+  else{PESSOAS.push(p);toast('✅ Pessoa cadastrada!');}
+  closeModal('modal-pessoa');
+  updateCounts();
+  if(currentPage==='pessoas') renderPessoasTable();
+  if(currentPage==='cards') renderCards();
+  if(currentPage==='equipes') renderEquipesTable();
+}
+function deletarPessoa(id){
+  if(!confirm('Remover esta pessoa?')) return;
+  PESSOAS=PESSOAS.filter(p=>p.id!==id);
+  Object.keys(ESCALAS).forEach(cid=>{Object.keys(ESCALAS[cid]).forEach(pid=>{ESCALAS[cid][pid]=ESCALAS[cid][pid].filter(x=>x!==id)})});
+  toast('🗑️ Pessoa removida.');
+  updateCounts(); renderPessoasTable();
+}
+function verPessoa(id){
+  const p=PESSOAS.find(x=>x.id===id); if(!p) return;
+  const eq=getEquipe(p.equipe), cor=avColor(p.funcao,p.equipe), ah=isAnivHoje(p.aniv);
+  document.getElementById('modal-ver-body').innerHTML=`
+    <div style="text-align:center;padding:20px 0 16px">
+      <div style="width:72px;height:72px;border-radius:50%;background:${cor};display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:#fff;margin:0 auto 12px">${initials(p.nome)}</div>
+      <div style="font-size:18px;font-weight:700">${p.nome}${ah?' 🎂':''}</div>
+      <div style="margin-top:8px"><span class="badge ${badgeClass(p.funcao)}">${p.funcao}</span></div>
+    </div>
+    <div style="display:grid;gap:10px">
+      <div style="padding:12px;background:var(--bg);border-radius:var(--r);display:flex;gap:12px;align-items:center">
+        <span style="font-size:20px">🏷️</span>
+        <div><div style="font-size:11px;color:var(--text-3);margin-bottom:2px">EQUIPE</div>
+        <div style="font-weight:500">${eq?`<span style="display:inline-flex;align-items:center;gap:6px"><span style="width:9px;height:9px;border-radius:50%;background:${eq.cor};display:inline-block"></span>${eq.nome}</span>`:'—'}</div></div>
+      </div>
+      ${p.tel?`<div style="padding:12px;background:var(--bg);border-radius:var(--r);display:flex;gap:12px;align-items:center"><span style="font-size:20px">📱</span><div><div style="font-size:11px;color:var(--text-3);margin-bottom:2px">TELEFONE</div><a href="https://wa.me/55${p.tel.replace(/\D/g,'')}" target="_blank" style="font-weight:500;color:var(--green)">${p.tel}</a></div></div>`:''}
+      ${p.aniv?`<div style="padding:12px;background:var(--bg);border-radius:var(--r);display:flex;gap:12px;align-items:center"><span style="font-size:20px">🎂</span><div><div style="font-size:11px;color:var(--text-3);margin-bottom:2px">ANIVERSÁRIO</div><div style="font-weight:500">${formatAniv(p.aniv)}${ah?' · <b>Hoje!</b>':isAnivMes(p.aniv)?' · Este mês':''}</div></div></div>`:''}
+      ${p.obs?`<div style="padding:12px;background:var(--bg);border-radius:var(--r);display:flex;gap:12px;align-items:center"><span style="font-size:20px">📝</span><div><div style="font-size:11px;color:var(--text-3);margin-bottom:2px">OBSERVAÇÕES</div><div style="font-weight:500">${p.obs}</div></div></div>`:''}
+    </div>
+    <div style="display:flex;justify-content:center;margin-top:16px">
+      <button class="btn btn-secondary" onclick="closeModal('modal-ver');editarPessoa('${p.id}')">✏️ Editar Cadastro</button>
+    </div>`;
+  openModal('modal-ver');
+}
+
+// ════════════════════════════════════
+// CRUD EQUIPE
+// ════════════════════════════════════
+function openEquipeModal(id){
+  editEquipeId=id||null;
+  document.getElementById('me-title').textContent=id?'Editar Equipe':'Nova Equipe';
+  const eq=id?EQUIPES.find(e=>e.id===id):null;
+  document.getElementById('me-nome').value=eq?eq.nome:'';
+  document.getElementById('me-cor').value=eq?eq.cor:'#2563EB';
+  document.getElementById('me-emoji').value=eq?eq.emoji:'';
+  openModal('modal-equipe');
+}
+function editarEquipe(id){openEquipeModal(id)}
+function salvarEquipe(){
+  const nome=document.getElementById('me-nome').value.trim();
+  if(!nome){alert('Informe o nome da equipe.');return}
+  const eq={id:editEquipeId||'eq'+Date.now(),nome,cor:document.getElementById('me-cor').value,emoji:document.getElementById('me-emoji').value};
+  if(editEquipeId){EQUIPES[EQUIPES.findIndex(e=>e.id===editEquipeId)]=eq;toast('✅ Equipe atualizada!');}
+  else{EQUIPES.push(eq);toast('✅ Equipe cadastrada!');}
+  closeModal('modal-equipe');
+  populateEquipeSelects();
+  updateCounts();
+  if(currentPage==='equipes') renderEquipesTable();
+}
+function deletarEquipe(id){
+  if(PESSOAS.some(p=>p.equipe===id)){alert('Existem membros nesta equipe. Remova-os primeiro.');return}
+  if(!confirm('Remover equipe?')) return;
+  EQUIPES=EQUIPES.filter(e=>e.id!==id);
+  populateEquipeSelects(); updateCounts(); renderEquipesTable();
+  toast('🗑️ Equipe removida.');
+}
+
+// ════════════════════════════════════
+// COMPARTILHAR WHATSAPP
+// ════════════════════════════════════
+function compartilharWhatsApp(cid){
+  const culto=CULTOS.find(c=>c.id===cid);
+  if(!culto){toast('Culto não encontrado.');return}
+  const esc=ESCALAS[cid]||{};
+  const eq=getEquipe(culto.equipeResp);
+  const totalEsc=Object.values(esc).flat().length;
+
+  // Monta o card de captura
+  let posHtml='';
+  POSICOES.forEach(pos=>{
+    const ids=esc[pos.id]||[];
+    posHtml+=`<div class="ec-pos">
+      <div class="ec-pos-hd">
+        <span class="ec-pos-icon">${pos.icon}</span>
+        <span class="ec-pos-nome">${pos.nome}</span>
+        <span class="ec-pos-count">${ids.length}</span>
+      </div>
+      <div class="ec-pos-body">
+        ${ids.length===0
+          ?`<div class="ec-pos-empty">Ninguém escalado</div>`
+          :ids.map(pid=>{
+              const p=getPessoa(pid);if(!p)return'';
+              const cor=avColor(p.funcao,p.equipe);
+              return `<div class="ec-membro">
+                <div class="ec-membro-av" style="background:${cor}">${initials(p.nome)}</div>
+                <span class="ec-membro-nome">${p.nome}</span>
+              </div>`;
+            }).join('')
+        }
+      </div>
+    </div>`;
+  });
+
+  const captureHTML=`
+    <div class="ec-header">
+      <div class="ec-header-left">
+        <div class="ec-church">✝ Belém Church</div>
+        <div class="ec-tipo">${culto.tipo}</div>
+        <div class="ec-data">${formatDataCurta(culto.data)} · ${culto.hora}${eq?' · '+eq.nome:''}</div>
+      </div>
+      <div class="ec-total">
+        <div class="ec-total-val">${totalEsc}</div>
+        <div class="ec-total-lbl">escalados</div>
+      </div>
+    </div>
+    <div class="ec-posicoes">${posHtml}</div>
+    <div class="ec-footer">Gerado por Belém Church · Sistema de Escalas</div>`;
+
+  document.getElementById('escala-capture').innerHTML=captureHTML;
+  document.getElementById('preview-culto-nome').textContent=`${culto.tipo} · ${formatDataCurta(culto.data)}`;
+  document.getElementById('preview-overlay').classList.add('open');
+  document.getElementById('btn-gerar-img').onclick=()=>gerarECompartilhar(cid);
+}
+
+function gerarECompartilhar(cid){
+  const btn=document.getElementById('btn-gerar-img');
+  btn.textContent='⏳ Gerando imagem...';
+  btn.disabled=true;
+
+  const el=document.getElementById('escala-capture');
+  html2canvas(el,{
+    scale:2,
+    backgroundColor:'#ffffff',
+    useCORS:true,
+    logging:false,
+  }).then(canvas=>{
+    btn.textContent='📲 Compartilhar no WhatsApp';
+    btn.disabled=false;
+
+    // tenta Web Share API (celular)
+    canvas.toBlob(blob=>{
+      if(navigator.share && navigator.canShare && navigator.canShare({files:[new File([blob],'escala.png',{type:'image/png'})]})){
+        const file=new File([blob],'escala-belem.png',{type:'image/png'});
+        navigator.share({
+          title:'Escala do Culto — Belém Church',
+          files:[file]
+        }).catch(()=>fallbackDownload(canvas));
+      } else {
+        fallbackDownload(canvas);
+      }
+    },'image/png');
+  }).catch(()=>{
+    btn.textContent='📲 Compartilhar no WhatsApp';
+    btn.disabled=false;
+    toast('Erro ao gerar imagem. Tente novamente.');
+  });
+}
+
+function fallbackDownload(canvas){
+  // Salva a imagem e abre o WhatsApp
+  const link=document.createElement('a');
+  link.download='escala-belem-church.png';
+  link.href=canvas.toDataURL('image/png');
+  link.click();
+  // Após 1s abre o WhatsApp para o usuário enviar
+  setTimeout(()=>{
+    const msg=encodeURIComponent('📋 Segue a escala do culto — Belém Church! (veja a imagem acima)');
+    window.open(`https://wa.me/?text=${msg}`,'_blank');
+  },1000);
+  toast('✅ Imagem salva! Abrindo WhatsApp...');
+}
+
+// ════════════════════════════════════
+// INIT
+// ════════════════════════════════════
+populateEquipeSelects();
+updateCounts();
+renderPessoasTable();
+</script>
+<!-- MODAL PREVIEW ESCALA -->
+<div class="preview-overlay" id="preview-overlay">
+  <div class="preview-modal">
+    <div class="preview-modal-hd">
+      <div>
+        <h3>📲 Compartilhar Escala</h3>
+        <div style="font-size:12px;color:var(--text-3);margin-top:2px" id="preview-culto-nome"></div>
+      </div>
+      <button class="modal-close" onclick="document.getElementById('preview-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="preview-modal-body">
+      <div style="font-size:12px;color:var(--text-3);margin-bottom:12px;">Prévia da imagem que será compartilhada:</div>
+      <!-- área de captura -->
+      <div id="escala-capture" style="background:#fff;padding:20px;border-radius:12px;border:1px solid var(--border);font-family:'Inter',sans-serif;"></div>
+    </div>
+    <div class="preview-modal-ft">
+      <button class="btn btn-secondary" onclick="document.getElementById('preview-overlay').classList.remove('open')">Cancelar</button>
+      <button class="btn btn-whatsapp" id="btn-gerar-img">📲 Compartilhar no WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('preview-overlay').addEventListener('click',function(e){
+  if(e.target===this)this.classList.remove('open');
+});
+</script>
+</body>
+</html>
